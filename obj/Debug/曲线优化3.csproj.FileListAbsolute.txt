@@ -1,0 +1,7 @@
+C:\Users\Administrator\source\repos\曲线优化3\bin\Debug\曲线优化3.exe.config
+C:\Users\Administrator\source\repos\曲线优化3\bin\Debug\曲线优化3.exe
+C:\Users\Administrator\source\repos\曲线优化3\bin\Debug\曲线优化3.pdb
+C:\Users\Administrator\source\repos\曲线优化3\obj\Debug\曲线优化3.csprojAssemblyReference.cache
+C:\Users\Administrator\source\repos\曲线优化3\obj\Debug\曲线优化3.csproj.CoreCompileInputs.cache
+C:\Users\Administrator\source\repos\曲线优化3\obj\Debug\曲线优化3.exe
+C:\Users\Administrator\source\repos\曲线优化3\obj\Debug\曲线优化3.pdb
