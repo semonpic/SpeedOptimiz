@@ -19,7 +19,7 @@ public class Program
         };
 
         TrajectoryPlanner planner = new TrajectoryPlanner(testSegments);
-        planner.ConvertToSmoothTrajectory(tolerance: 20, minAngleDeg: 0.1);
+        planner.ConvertToSmoothTrajectory(tolerance: 30, minAngleDeg: 0.1);
 
         // 添加速度规划
         planner.PlanVelocity(maxCentripetalAcceleration: 10);
@@ -810,69 +810,51 @@ public static class MathUtils
     {
         return v1.X * v2.Y - v1.Y * v2.X;
     }
-
+    // 计算两条直线长度和夹角下的最大半径
+    public static double MaxArcRadius(double len1, double len2, double angle)
+    {
+        double d_max = Math.Min(len1, len2) / 2.0;
+        return d_max * Math.Tan(angle / 2.0);
+    }
     public static (PointD center, double radius, PointD arcStart, PointD arcEnd, bool isValid) CalculateArc(
         PointD p0, PointD p1, PointD p2, double maxCentripetalAccel, double epsilon = 0.1)
     {
-        // 计算向量：从拐点p1到前一点p0和到后一点p2
-        PointD v1 = new PointD(p0.X - p1.X, p0.Y - p1.Y); // p1 -> p0
-        PointD v2 = new PointD(p2.X - p1.X, p2.Y - p1.Y); // p1 -> p2
-
-        // 计算向量长度
+        PointD v1 = new PointD(p0.X - p1.X, p0.Y - p1.Y);
+        PointD v2 = new PointD(p2.X - p1.X, p2.Y - p1.Y);
         double v1Length = Math.Sqrt(v1.X * v1.X + v1.Y * v1.Y);
         double v2Length = Math.Sqrt(v2.X * v2.X + v2.Y * v2.Y);
-
-        // 检查零向量
         if (v1Length < 1e-10 || v2Length < 1e-10)
             return (new PointD(0, 0), 0, p1, p1, false);
-
-        // 计算单位向量
         PointD u1 = new PointD(v1.X / v1Length, v1.Y / v1Length);
         PointD u2 = new PointD(v2.X / v2Length, v2.Y / v2Length);
-
-        // 计算夹角
-        double cosTheta = DotProduct(u1, u2);
+        double cosTheta = u1.X * u2.X + u1.Y * u2.Y;
         cosTheta = Clamp(cosTheta, -1.0, 1.0);
         double theta = Math.Acos(cosTheta);
-
-        // 检查共线情况
         if (theta < 1e-6 || Math.PI - theta < 1e-6)
             return (new PointD(0, 0), 0, p1, p1, false);
-
-        // 计算角平分线方向 (u1 + u2)
         PointD bisector = new PointD(u1.X + u2.X, u1.Y + u2.Y);
         double bisectorLength = Math.Sqrt(bisector.X * bisector.X + bisector.Y * bisector.Y);
-
-        // 检查角平分线是否为零
         if (bisectorLength < 1e-10)
             return (new PointD(0, 0), 0, p1, p1, false);
-
-        // 归一化角平分线
         PointD bisectorNormalized = new PointD(bisector.X / bisectorLength, bisector.Y / bisectorLength);
 
-        // 计算圆弧半径
+        // 限制最大半径
+        double r_limit = MaxArcRadius(v1Length, v2Length, theta);
         double r = epsilon / (1 - Math.Sin(theta / 2));
+        r = Math.Min(r, r_limit);
         r = Math.Max(r, maxCentripetalAccel / (Math.PI * Math.PI));
 
-        // 计算圆心位置：沿角平分线方向移动 d = r / sin(θ/2)
         double d = r / Math.Sin(theta / 2);
         double cx = p1.X + bisectorNormalized.X * d;
         double cy = p1.Y + bisectorNormalized.Y * d;
 
-        // 计算圆弧起点和终点
         double offset = r / Math.Tan(theta / 2);
-        PointD arcStart = new PointD(
-            p1.X + u1.X * offset,
-            p1.Y + u1.Y * offset
-        );
-
-        PointD arcEnd = new PointD(
-            p1.X + u2.X * offset,
-            p1.Y + u2.Y * offset
-        );
+        PointD arcStart = new PointD(p1.X + u1.X * offset, p1.Y + u1.Y * offset);
+        PointD arcEnd = new PointD(p1.X + u2.X * offset, p1.Y + u2.Y * offset);
 
         return (new PointD(cx, cy), r, arcStart, arcEnd, true);
     }
+
 }
 
 public class PointD
