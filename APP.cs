@@ -10,87 +10,20 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        // 测试1：锐角（< 90°）
-        List<Segment> acuteAngleSegments = new List<Segment>
-        {
-            new Segment { Xs = 0, Ys = 0, Xe = 100, Ye = 0, Acceleration = 10, Vmax = 200 },
-            new Segment { Xs = 100, Ys = 0, Xe = 150, Ye = 100, Acceleration = 10, Vmax = 200 },
-            new Segment { Xs = 150, Ys = 100, Xe = 200, Ye = 0, Acceleration = 10, Vmax = 200 }
-        };
-
-        // 测试2：直角（90°）
-        List<Segment> rightAngleSegments = new List<Segment>
+        // 测试数据：直角（90°）
+        List<Segment> testSegments = new List<Segment>
         {
             new Segment { Xs = 0, Ys = 0, Xe = 100, Ye = 0, Acceleration = 10, Vmax = 200 },
             new Segment { Xs = 100, Ys = 0, Xe = 100, Ye = 100, Acceleration = 10, Vmax = 200 },
-            //new Segment { Xs = 100, Ys = 100, Xe = 200, Ye = 100, Acceleration = 10, Vmax = 200 }
+            new Segment { Xs = 100, Ys = 100, Xe = 200, Ye = 100, Acceleration = 10, Vmax = 200 }
         };
-
-        // 测试3：钝角（> 90°）
-        List<Segment> obtuseAngleSegments = new List<Segment>
-        {
-            new Segment { Xs = 0, Ys = 0, Xe = 100, Ye = 0, Acceleration = 10, Vmax = 200 },
-            new Segment { Xs = 100, Ys = 0, Xe = 200, Ye = 50, Acceleration = 10, Vmax = 200 },
-            new Segment { Xs = 200, Ys = 50, Xe = 300, Ye = 0, Acceleration = 10, Vmax = 200 }
-        };
-
-        // 测试4：平角（180°）——不应生成圆弧
-        List<Segment> straightAngleSegments = new List<Segment>
-        {
-            new Segment { Xs = 0, Ys = 0, Xe = 100, Ye = 0, Acceleration = 10, Vmax = 200 },
-            new Segment { Xs = 100, Ys = 0, Xe = 200, Ye = 0, Acceleration = 10, Vmax = 200 }
-        };
-
-        // 测试5：小角度（接近直线）
-        List<Segment> smallAngleSegments = new List<Segment>
-        {
-            new Segment { Xs = 0, Ys = 0, Xe = 100, Ye = 0, Acceleration = 10, Vmax = 200 },
-            new Segment { Xs = 100, Ys = 0, Xe = 200, Ye = 1, Acceleration = 10, Vmax = 200 }
-        };
-
-        // 测试6：大角度（接近180°）
-        List<Segment> largeAngleSegments = new List<Segment>
-        {
-            new Segment { Xs = 0, Ys = 0, Xe = 100, Ye = 0, Acceleration = 10, Vmax = 200 },
-            new Segment { Xs = 100, Ys = 0, Xe = 200, Ye = -1, Acceleration = 10, Vmax = 200 }
-        };
-
-        // 测试7：垂直折线
-        List<Segment> verticalSegments = new List<Segment>
-        {
-            new Segment { Xs = 0, Ys = 0, Xe = 0, Ye = 100, Acceleration = 10, Vmax = 200 },
-            new Segment { Xs = 0, Ys = 100, Xe = 100, Ye = 100, Acceleration = 10, Vmax = 200 }
-        };
-
-        // 测试8：复杂折线（多个拐点）
-        List<Segment> complexSegments = new List<Segment>
-        {
-            new Segment { Xs = 0, Ys = 0, Xe = 100, Ye = 0, Acceleration = 10, Vmax = 200 },
-            new Segment { Xs = 100, Ys = 0, Xe = 150, Ye = 50, Acceleration = 10, Vmax = 200 },
-            new Segment { Xs = 150, Ys = 50, Xe = 200, Ye = 0, Acceleration = 10, Vmax = 200 },
-            new Segment { Xs = 200, Ys = 0, Xe = 250, Ye = -50, Acceleration = 10, Vmax = 200 },
-            new Segment { Xs = 250, Ys = -50, Xe = 300, Ye = 0, Acceleration = 10, Vmax = 200 }
-        };
-        // 测试数据5: 钝角测试
-        //List<Segment> obtuseAngleSegments = new List<Segment>
-        //{
-        //    new Segment { Xs = 0, Ys = 0, Xe = 100, Ye = 0, Acceleration = 10, Vmax = 200 },
-        //    new Segment { Xs = 100, Ys = 0, Xe = 200, Ye = 50, Acceleration = 10, Vmax = 200 },
-        //    new Segment { Xs = 200, Ys = 50, Xe = 300, Ye = 0, Acceleration = 10, Vmax = 200 }
-        //};
-        List<Segment> robotSegments = new List<Segment>
-        {
-            new Segment { Xs = 0, Ys = 0, Xe = 220000, Ye = 8885679, Acceleration = 10, Vmax = 200 },
-            new Segment { Xs = 220000, Ys = 8885679, Xe = 990027, Ye = 24507507, Acceleration = 10, Vmax = 200 },
-            new Segment { Xs = 990027, Ys = 24507507, Xe = 1593626, Ye = 37487849, Acceleration = 10, Vmax = 200 },
-            new Segment { Xs = 1593626, Ys = 37487849, Xe = 1734509, Ye = 39400618, Acceleration = 10, Vmax = 200 },
-
-        };
-        // 选择要测试的数据集
-        List<Segment> testSegments = rightAngleSegments;
 
         TrajectoryPlanner planner = new TrajectoryPlanner(testSegments);
-        planner.ConvertToSmoothTrajectory(tolerance: 20, minAngleDeg: 0.1); // 设置最小角度为15度
+        planner.ConvertToSmoothTrajectory(tolerance: 20, minAngleDeg: 0.1);
+
+        // 添加速度规划
+        planner.PlanVelocity(maxCentripetalAcceleration: 10);
+
         planner.PlotTrajectory();
     }
 }
@@ -103,15 +36,19 @@ public class Segment
     public double Ye { get; set; }
     public double Acceleration { get; set; }
     public double Vmax { get; set; }
+    public double StartVelocity { get; set; } = 0; // 线段起始速度
+    public double EndVelocity { get; set; } = 0;   // 线段结束速度
+    public double CornerMaxVelocity { get; set; } = double.MaxValue; // 拐角最大速度限制
+    public bool IsArc { get; set; } = false; // 是否是圆弧段
 
     public double Length => Math.Sqrt(Math.Pow(Xe - Xs, 2) + Math.Pow(Ye - Ys, 2));
-    public double MaxCornerVelocity => Math.Sqrt(2 * Acceleration * Length);
 }
 
 public class TrajectoryPlanner
 {
     private List<Segment> originalSegments;
     private List<Segment> processedSegments;
+    private List<double> cornerMaxVelocities = new List<double>(); // 存储每个拐角的最大速度
 
     public TrajectoryPlanner(List<Segment> originalSegments)
     {
@@ -123,6 +60,7 @@ public class TrajectoryPlanner
     public void ConvertToSmoothTrajectory(double tolerance, double minAngleDeg = 5)
     {
         processedSegments.Clear();
+        cornerMaxVelocities.Clear();
 
         if (originalSegments.Count == 0) return;
         if (originalSegments.Count == 1)
@@ -164,6 +102,7 @@ public class TrajectoryPlanner
                     Vmax = next.Vmax
                 };
                 processedSegments.Add(nextSegment);
+                cornerMaxVelocities.Add(double.MaxValue); // 无拐角速度限制
                 continue;
             }
 
@@ -192,6 +131,10 @@ public class TrajectoryPlanner
                     radius, tolerance,
                     current.Acceleration, current.Vmax
                 );
+
+                // 标记圆弧段
+                foreach (var seg in arcSegments) seg.IsArc = true;
+
                 processedSegments.AddRange(arcSegments);
 
                 // 添加下一个线段（截断版）
@@ -205,6 +148,11 @@ public class TrajectoryPlanner
                     Vmax = next.Vmax
                 };
                 processedSegments.Add(truncatedNext);
+
+                // 计算并保存拐角最大速度
+                double cornerMaxVel = Math.Sqrt(10 * radius); // 最大向心加速度设为10 mm/s²
+                cornerMaxVelocities.Add(cornerMaxVel);
+                Console.WriteLine($"拐角{i + 1}最大速度: {cornerMaxVel:F2} mm/s");
             }
             else
             {
@@ -220,6 +168,85 @@ public class TrajectoryPlanner
                     Vmax = next.Vmax
                 };
                 processedSegments.Add(nextSegment);
+                cornerMaxVelocities.Add(double.MaxValue); // 无拐角速度限制
+            }
+        }
+    }
+
+    // 前瞻后顾速度规划算法
+    public void PlanVelocity(double maxCentripetalAcceleration)
+    {
+        if (processedSegments.Count == 0) return;
+
+        // 初始化速度数组
+        double[] v_start = new double[processedSegments.Count];
+        double[] v_end = new double[processedSegments.Count];
+
+        // 1. 正向遍历（前瞻）
+        v_start[0] = 0; // 起始速度为0
+
+        for (int i = 0; i < processedSegments.Count; i++)
+        {
+            Segment seg = processedSegments[i];
+
+            // 计算当前段的最大可达结束速度
+            double v_max_end = Math.Sqrt(v_start[i] * v_start[i] + 2 * seg.Acceleration * seg.Length);
+            v_max_end = Math.Min(v_max_end, seg.Vmax); // 不超过段的最大速度
+
+            // 应用拐角速度限制（如果是拐角）
+            if (i < processedSegments.Count - 1 && i < cornerMaxVelocities.Count)
+            {
+                v_max_end = Math.Min(v_max_end, cornerMaxVelocities[i]);
+            }
+
+            v_end[i] = v_max_end;
+
+            // 设置下一段的起始速度
+            if (i < processedSegments.Count - 1)
+            {
+                v_start[i + 1] = v_end[i];
+            }
+        }
+
+        // 2. 反向遍历（后顾）
+        v_end[processedSegments.Count - 1] = 0; // 最后一段结束速度为0
+
+        for (int i = processedSegments.Count - 1; i >= 0; i--)
+        {
+            Segment seg = processedSegments[i];
+
+            // 计算当前段的最大可达起始速度
+            double v_max_start = Math.Sqrt(v_end[i] * v_end[i] + 2 * seg.Acceleration * seg.Length);
+            v_max_start = Math.Min(v_max_start, seg.Vmax); // 不超过段的最大速度
+
+            // 应用拐角速度限制（如果是拐角）
+            if (i < cornerMaxVelocities.Count)
+            {
+                v_max_start = Math.Min(v_max_start, cornerMaxVelocities[i]);
+            }
+
+            // 更新起始速度（取正向和反向计算的最小值）
+            v_start[i] = Math.Min(v_start[i], v_max_start);
+
+            // 更新前一段的结束速度
+            if (i > 0)
+            {
+                v_end[i - 1] = Math.Min(v_end[i - 1], v_start[i]);
+            }
+        }
+
+        // 3. 应用计算的速度到线段
+        for (int i = 0; i < processedSegments.Count; i++)
+        {
+            processedSegments[i].StartVelocity = v_start[i];
+            processedSegments[i].EndVelocity = v_end[i];
+
+            // 对于圆弧段，应用拐角速度限制
+            if (processedSegments[i].IsArc && i < cornerMaxVelocities.Count)
+            {
+                double cornerMaxVel = cornerMaxVelocities[i];
+                processedSegments[i].StartVelocity = Math.Min(processedSegments[i].StartVelocity, cornerMaxVel);
+                processedSegments[i].EndVelocity = Math.Min(processedSegments[i].EndVelocity, cornerMaxVel);
             }
         }
     }
@@ -380,6 +407,17 @@ public class TrajectoryPlanner
         centerPointsSeries.MarkerStyle = MarkerStyle.Cross;
         centerPointsSeries.MarkerSize = 10;
 
+        // 创建速度标注系列
+        Series velocitySeries = new Series("速度标注");
+        velocitySeries.ChartType = SeriesChartType.Point;
+        velocitySeries.Color = Color.Orange;
+        velocitySeries.MarkerStyle = MarkerStyle.Square;
+        velocitySeries.MarkerSize = 6;
+        velocitySeries.Label = "#VALY{F1}";
+        velocitySeries.IsValueShownAsLabel = true;
+        velocitySeries.LabelForeColor = Color.DarkBlue;
+        velocitySeries.LabelAngle = -45;
+
         // 绘制原始轨迹
         foreach (var segment in originalSegments)
         {
@@ -396,6 +434,13 @@ public class TrajectoryPlanner
         {
             processedSeries.Points.AddXY(segment.Xs, segment.Ys);
             processedSeries.Points.AddXY(segment.Xe, segment.Ye);
+
+            // 添加速度标注（在线段中点）
+            double midX = (segment.Xs + segment.Xe) / 2;
+            double midY = (segment.Ys + segment.Ye) / 2;
+            double avgVelocity = (segment.StartVelocity + segment.EndVelocity) / 2;
+            velocitySeries.Points.AddXY(midX, midY);
+            velocitySeries.Points[velocitySeries.Points.Count - 1].Tag = avgVelocity;
         }
 
         // 添加圆弧中心点
@@ -422,6 +467,7 @@ public class TrajectoryPlanner
         chart.Series.Add(processedSeries);
         chart.Series.Add(keyPointsSeries);
         chart.Series.Add(centerPointsSeries);
+        chart.Series.Add(velocitySeries);
 
         // 添加图例
         Legend legend = new Legend();
@@ -434,16 +480,19 @@ public class TrajectoryPlanner
         ToolStripButton zoomOutButton = new ToolStripButton("缩小");
         ToolStripButton resetButton = new ToolStripButton("重置视图");
         ToolStripButton debugButton = new ToolStripButton("调试信息");
+        ToolStripButton velocityButton = new ToolStripButton("显示速度曲线");
 
         zoomInButton.Click += (s, e) => ZoomChart(chart, 0.8);
         zoomOutButton.Click += (s, e) => ZoomChart(chart, 1.2);
         resetButton.Click += (s, e) => ResetChartZoom(chart);
         debugButton.Click += (s, e) => ShowDebugInfo();
+        velocityButton.Click += (s, e) => PlotVelocityProfile();
 
         toolStrip.Items.Add(zoomInButton);
         toolStrip.Items.Add(zoomOutButton);
         toolStrip.Items.Add(resetButton);
         toolStrip.Items.Add(debugButton);
+        toolStrip.Items.Add(velocityButton);
 
         // 创建窗体
         Form form = new Form();
@@ -463,6 +512,75 @@ public class TrajectoryPlanner
 
         form.Controls.Add(tableLayout);
         Application.Run(form);
+    }
+
+    // 绘制速度曲线
+    private void PlotVelocityProfile()
+    {
+        if (processedSegments == null || processedSegments.Count == 0)
+        {
+            MessageBox.Show("没有轨迹数据可显示", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
+        }
+
+        Form velocityForm = new Form();
+        velocityForm.Text = "速度曲线";
+        velocityForm.Size = new Size(800, 600);
+
+        Chart velocityChart = new Chart();
+        velocityChart.Dock = DockStyle.Fill;
+
+        ChartArea velocityArea = new ChartArea();
+        velocityChart.ChartAreas.Add(velocityArea);
+
+        Series velocitySeries = new Series("速度曲线");
+        velocitySeries.ChartType = SeriesChartType.Line;
+        velocitySeries.Color = Color.Blue;
+        velocitySeries.BorderWidth = 3;
+
+        // 计算总长度和速度
+        double totalDistance = 0;
+        List<double> distances = new List<double>();
+        List<double> velocities = new List<double>();
+
+        // 添加起始点
+        distances.Add(0);
+        velocities.Add(processedSegments[0].StartVelocity);
+
+        foreach (var segment in processedSegments)
+        {
+            totalDistance += segment.Length;
+            distances.Add(totalDistance);
+            velocities.Add(segment.EndVelocity);
+
+            // 添加中点速度（用于显示加速度）
+            double midDistance = totalDistance - segment.Length / 2;
+            double midVelocity = (segment.StartVelocity + segment.EndVelocity) / 2;
+            distances.Add(midDistance);
+            velocities.Add(midVelocity);
+        }
+
+        // 按距离排序
+        var sortedData = distances.Zip(velocities, (d, v) => new { Distance = d, Velocity = v })
+                                 .OrderBy(p => p.Distance)
+                                 .ToList();
+
+        // 添加数据点
+        for (int i = 0; i < sortedData.Count; i++)
+        {
+            velocitySeries.Points.AddXY(sortedData[i].Distance, sortedData[i].Velocity);
+        }
+
+        velocityChart.Series.Add(velocitySeries);
+
+        // 设置坐标轴标签
+        velocityArea.AxisX.Title = "距离 (mm)";
+        velocityArea.AxisY.Title = "速度 (mm/s)";
+        velocityArea.AxisX.MajorGrid.LineColor = Color.LightGray;
+        velocityArea.AxisY.MajorGrid.LineColor = Color.LightGray;
+
+        velocityForm.Controls.Add(velocityChart);
+        velocityForm.Show();
     }
 
     private void ShowDebugInfo()
@@ -520,7 +638,85 @@ public class TrajectoryPlanner
             info += "\n";
         }
 
+        // 添加速度信息
+        info += "\n=== 速度规划结果 ===\n";
+        double totalDistance = 0;
+        double estimatedTime = 0;
+
+        for (int i = 0; i < processedSegments.Count; i++)
+        {
+            var seg = processedSegments[i];
+            double segTime = CalculateSegmentTime(seg);
+            estimatedTime += segTime;
+            totalDistance += seg.Length;
+
+            info += $"线段 {i + 1} ({seg.Xs:F1},{seg.Ys:F1}) -> ({seg.Xe:F1},{seg.Ye:F1}):\n";
+            info += $"  长度: {seg.Length:F2} mm\n";
+            info += $"  起始速度: {seg.StartVelocity:F2} mm/s\n";
+            info += $"  结束速度: {seg.EndVelocity:F2} mm/s\n";
+            info += $"  加速度: {seg.Acceleration} mm/s²\n";
+            info += $"  预估时间: {segTime:F3} s\n";
+
+            if (i < cornerMaxVelocities.Count)
+            {
+                info += $"  拐角速度限制: {cornerMaxVelocities[i]:F2} mm/s\n";
+            }
+
+            info += "\n";
+        }
+
+        info += $"总距离: {totalDistance:F2} mm\n";
+        info += $"预估总时间: {estimatedTime:F3} s\n";
+
         MessageBox.Show(info, "调试信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
+    }
+
+    // 计算线段所需时间
+    private double CalculateSegmentTime(Segment seg)
+    {
+        if (Math.Abs(seg.StartVelocity - seg.EndVelocity) < 1e-6)
+        {
+            // 匀速运动
+            return seg.Length / seg.StartVelocity;
+        }
+        else if (seg.EndVelocity > seg.StartVelocity)
+        {
+            // 加速运动
+            double acceleration = seg.Acceleration;
+            double t = (seg.EndVelocity - seg.StartVelocity) / acceleration;
+            double distance = (seg.StartVelocity + seg.EndVelocity) * t / 2;
+
+            if (distance >= seg.Length)
+            {
+                // 实际未达到目标速度
+                double v_max = Math.Sqrt(seg.StartVelocity * seg.StartVelocity + 2 * acceleration * seg.Length);
+                return (v_max - seg.StartVelocity) / acceleration;
+            }
+            else
+            {
+                // 加速到目标速度
+                return t;
+            }
+        }
+        else
+        {
+            // 减速运动
+            double deceleration = seg.Acceleration;
+            double t = (seg.StartVelocity - seg.EndVelocity) / deceleration;
+            double distance = (seg.StartVelocity + seg.EndVelocity) * t / 2;
+
+            if (distance >= seg.Length)
+            {
+                // 实际未减速到目标速度
+                double v_min = Math.Sqrt(seg.StartVelocity * seg.StartVelocity - 2 * deceleration * seg.Length);
+                return (seg.StartVelocity - v_min) / deceleration;
+            }
+            else
+            {
+                // 减速到目标速度
+                return t;
+            }
+        }
     }
 
     // 鼠标滚轮缩放
